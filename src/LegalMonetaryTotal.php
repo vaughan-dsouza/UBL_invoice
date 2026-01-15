@@ -140,50 +140,83 @@ class LegalMonetaryTotal implements XmlSerializable
      *
      * @return void
      */
+    // function xmlSerialize(Writer $writer)
+    // {
+    //     // TODO: Implement xmlSerialize() method.
+    //     $writer->write([
+    //         [
+    //             'name'       => Schema::CBC . 'LineExtensionAmount',
+    //             'value'      => number_format($this->lineExtensionAmount, 2, '.', ''),
+    //             'attributes' => [
+    //                 'currencyID' => Generator::$currencyID,
+    //             ],
+
+    //         ],
+    //         [
+    //             'name'       => Schema::CBC . 'TaxExclusiveAmount',
+    //             'value'      => number_format($this->taxExclusiveAmount, 2, '.', ''),
+    //             'attributes' => [
+    //                 'currencyID' => Generator::$currencyID,
+    //             ],
+
+    //         ],
+    //         [
+    //             'name'       => Schema::CBC . 'TaxInclusiveAmount',
+    //             'value'      => number_format($this->taxInclusiveAmount, 2, '.', ''),
+    //             'attributes' => [
+    //                 'currencyID' => Generator::$currencyID,
+    //             ],
+
+    //         ],
+    //         [
+    //             'name'       => Schema::CBC . 'AllowanceTotalAmount',
+    //             'value'      => number_format($this->allowanceTotalAmount, 2, '.', ''),
+    //             'attributes' => [
+    //                 'currencyID' => Generator::$currencyID,
+    //             ],
+
+    //         ],
+    //         [
+    //             'name'       => Schema::CBC . 'PayableAmount',
+    //             'value'      => number_format($this->payableAmount, 2, '.', ''),
+    //             'attributes' => [
+    //                 'currencyID' => Generator::$currencyID,
+    //             ],
+
+    //         ],
+    //     ]);
+    // }
     function xmlSerialize(Writer $writer)
     {
-        // TODO: Implement xmlSerialize() method.
-        $writer->write([
-            [
-                'name'       => Schema::CBC . 'LineExtensionAmount',
-                'value'      => number_format($this->lineExtensionAmount, 2, '.', ''),
+        $nodes = [];
+
+        $addMoney = function (string $name, $value) use (&$nodes) {
+            // normalize
+            if ($value === null || $value === '') {
+                $value = 0;
+            }
+
+            $value = round((float) $value, 2);
+
+            if ($value == 0.00) {
+                return;
+            }
+
+            $nodes[] = [
+                'name'       => $name,
+                'value'      => number_format($value, 2, '.', ''),
                 'attributes' => [
                     'currencyID' => Generator::$currencyID,
                 ],
+            ];
+        };
 
-            ],
-            [
-                'name'       => Schema::CBC . 'TaxExclusiveAmount',
-                'value'      => number_format($this->taxExclusiveAmount, 2, '.', ''),
-                'attributes' => [
-                    'currencyID' => Generator::$currencyID,
-                ],
+        $addMoney(Schema::CBC . 'LineExtensionAmount', $this->lineExtensionAmount);
+        $addMoney(Schema::CBC . 'TaxExclusiveAmount',  $this->taxExclusiveAmount);
+        $addMoney(Schema::CBC . 'TaxInclusiveAmount',  $this->taxInclusiveAmount);
+        $addMoney(Schema::CBC . 'AllowanceTotalAmount', $this->allowanceTotalAmount);
+        $addMoney(Schema::CBC . 'PayableAmount',       $this->payableAmount);
 
-            ],
-            [
-                'name'       => Schema::CBC . 'TaxInclusiveAmount',
-                'value'      => number_format($this->taxInclusiveAmount, 2, '.', ''),
-                'attributes' => [
-                    'currencyID' => Generator::$currencyID,
-                ],
-
-            ],
-            [
-                'name'       => Schema::CBC . 'AllowanceTotalAmount',
-                'value'      => number_format($this->allowanceTotalAmount, 2, '.', ''),
-                'attributes' => [
-                    'currencyID' => Generator::$currencyID,
-                ],
-
-            ],
-            [
-                'name'       => Schema::CBC . 'PayableAmount',
-                'value'      => number_format($this->payableAmount, 2, '.', ''),
-                'attributes' => [
-                    'currencyID' => Generator::$currencyID,
-                ],
-
-            ],
-        ]);
+        $writer->write($nodes);
     }
 }
