@@ -1,41 +1,38 @@
 {
-    "name": "crixuamg/ubl_invoice",
-    "description": "A PHP wrapper for UBL invoices",
-    "keywords": [
-        "ubl",
-        "invoice",
-        "ublinvoice",
-        "crixuamg",
-        "clever invoice",
-        "electronic invoice",
-        "xml",
-        "xml invoice"
-    ],
-    "homepage": "https://github.com/CrixuAMG/UBL_invoice",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "CrixuAMG",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "sabre/xml": "^1.5"
-    },
-    "autoload": {
-        "psr-4": {
-            "CrixuAMG\\UBL\\Invoice\\": [
-                "src/"
-            ]
-        }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5",
-        "greenter/ubl-validator": "^2.0"
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "CrixuAMG\\UBL\\Invoice\\Tests\\": "tests/"
-        }
+  "name": "vaughan/ubl-invoice",
+  "description": "A PHP wrapper for UBL invoices",
+  "type": "library",
+  "keywords": [
+    "ubl",
+    "invoice",
+    "ublinvoice",
+    "electronic invoice",
+    "xml",
+    "xml invoice"
+  ],
+  "homepage": "https://github.com/vaughan-dsouza/UBL_invoice",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vaughan D'souza",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "sabre/xml": "^1.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vaughan\\UBL\\Invoice\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5",
+    "greenter/ubl-validator": "^2.0"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Vaughan\\UBL\\Invoice\\Tests\\": "tests/"
+    }
+  }
 }
