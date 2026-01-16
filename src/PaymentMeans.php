@@ -1,6 +1,6 @@
 <?php
 
-namespace CrixuAMG\UBL\Invoice;
+namespace Vaughan\UBL\Invoice;
 
 use DateTime;
 use Sabre\Xml\Writer;

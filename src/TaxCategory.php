@@ -1,6 +1,6 @@
 <?php
 
-namespace CrixuAMG\UBL\Invoice;
+namespace Vaughan\UBL\Invoice;
 
 use InvalidArgumentException;
 use Sabre\Xml\Writer;
@@ -9,7 +9,7 @@ use Sabre\Xml\XmlSerializable;
 /**
  * Class TaxCategory
  *
- * @package CrixuAMG\UBL\Invoice
+ * @package Vaughan\UBL\Invoice
  */
 class TaxCategory implements XmlSerializable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace CrixuAMG\UBL\Invoice;
+namespace Vaughan\UBL\Invoice;
 
 use DateTime;
 use InvalidArgumentException;
@@ -10,7 +10,7 @@ use Sabre\Xml\XmlSerializable;
 /**
  * Class Invoice
  *
- * @package CrixuAMG\UBL\Invoice
+ * @package Vaughan\UBL\Invoice
  */
 class Invoice implements XmlSerializable
 {
