@@ -196,7 +196,7 @@ class InvoiceLine implements XmlSerializable
             if (!empty($lineExtensionAmount['attributes'])) {
                 $lineExtensionAmountAttributes = $lineExtensionAmount['attributes'];
             }
-            if (!empty($lineExtensionAmount['value'])) {
+            if (array_key_exists('value', $lineExtensionAmount)) {
                 $lineExtensionAmount = $lineExtensionAmount['value'];
             }
         }
@@ -207,14 +207,17 @@ class InvoiceLine implements XmlSerializable
             if (!empty($invoicedQuantity['attributes'])) {
                 $invoicedQuantityAttributes = $invoicedQuantity['attributes'];
             }
-            if (!empty($invoicedQuantity['value'])) {
+            if (array_key_exists('value', $invoicedQuantity)) {
                 $invoicedQuantity = $invoicedQuantity['value'];
             }
         }
 
-        $writer->write([
-            Schema::CBC . 'ID'       => $this->id,
-            [
+        $nodes = [
+            Schema::CBC . 'ID' => $this->id,
+        ];
+
+        if ((float) $invoicedQuantity !== 0.0) {
+            $nodes[] = [
                 'name'       => Schema::CBC . 'InvoicedQuantity',
                 'value'      => $invoicedQuantity,
                 'attributes' => array_merge(
@@ -223,8 +226,11 @@ class InvoiceLine implements XmlSerializable
                     ],
                     $invoicedQuantityAttributes
                 ),
-            ],
-            [
+            ];
+        }
+
+        if ((float) $lineExtensionAmount !== 0.0) {
+            $nodes[] = [
                 'name'       => Schema::CBC . 'LineExtensionAmount',
                 'value'      => number_format($lineExtensionAmount, 2, '.', ''),
                 'attributes' => array_merge(
@@ -233,17 +239,18 @@ class InvoiceLine implements XmlSerializable
                     ],
                     $lineExtensionAmountAttributes
                 ),
-            ],
-            Schema::CAC . 'TaxTotal' => $this->taxTotal,
-            Schema::CAC . 'Item'     => $this->item,
-        ]);
+            ];
+        }
+
+        $nodes[Schema::CAC . 'TaxTotal'] = $this->taxTotal;
+        $nodes[Schema::CAC . 'Item']     = $this->item;
+
+        $writer->write($nodes);
 
         if ($this->price !== null) {
-            $writer->write(
-                [
-                    Schema::CAC . 'Price' => $this->price,
-                ]
-            );
+            $writer->write([
+                Schema::CAC . 'Price' => $this->price,
+            ]);
         }
     }
 }

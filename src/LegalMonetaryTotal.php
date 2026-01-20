@@ -190,7 +190,7 @@ class LegalMonetaryTotal implements XmlSerializable
     {
         $nodes = [];
 
-        $addMoney = function (string $name, $value) use (&$nodes) {
+        $addMoney = function (string $name, $value, bool $optional = false) use (&$nodes) {
             // normalize
             if ($value === null || $value === '') {
                 $value = 0;
@@ -198,7 +198,8 @@ class LegalMonetaryTotal implements XmlSerializable
 
             $value = round((float) $value, 2);
 
-            if ($value == 0.00) {
+            // only optional fields may be omitted when zero
+            if ($optional && $value == 0.00) {
                 return;
             }
 
@@ -211,11 +212,18 @@ class LegalMonetaryTotal implements XmlSerializable
             ];
         };
 
+        // Mandatory — NEVER remove
         $addMoney(Schema::CBC . 'LineExtensionAmount', $this->lineExtensionAmount);
         $addMoney(Schema::CBC . 'TaxExclusiveAmount',  $this->taxExclusiveAmount);
         $addMoney(Schema::CBC . 'TaxInclusiveAmount',  $this->taxInclusiveAmount);
-        $addMoney(Schema::CBC . 'AllowanceTotalAmount', $this->allowanceTotalAmount);
         $addMoney(Schema::CBC . 'PayableAmount',       $this->payableAmount);
+
+        // Optional — may be removed when zero
+        $addMoney(
+            Schema::CBC . 'AllowanceTotalAmount',
+            $this->allowanceTotalAmount,
+            true
+        );
 
         $writer->write($nodes);
     }

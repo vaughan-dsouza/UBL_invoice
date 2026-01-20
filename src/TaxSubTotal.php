@@ -98,26 +98,31 @@ class TaxSubTotal implements XmlSerializable
     {
         $this->validate();
 
-        $writer->write([
-                [
-                    'name'       => Schema::CBC . 'TaxableAmount',
-                    'value'      => number_format($this->taxableAmount, 2, '.', ''),
-                    'attributes' => [
-                        'currencyID' => Generator::$currencyID,
-                    ],
+        $elements = [];
 
+        if ((float) $this->taxableAmount !== 0.0) {
+            $elements[] = [
+                'name'       => Schema::CBC . 'TaxableAmount',
+                'value'      => number_format($this->taxableAmount, 2, '.', ''),
+                'attributes' => [
+                    'currencyID' => Generator::$currencyID,
                 ],
-                [
-                    'name'       => Schema::CBC . 'TaxAmount',
-                    'value'      => number_format($this->taxAmount, 2, '.', ''),
-                    'attributes' => [
-                        'currencyID' => Generator::$currencyID,
-                    ],
+            ];
+        }
 
+        if ((float) $this->taxAmount !== 0.0) {
+            $elements[] = [
+                'name'       => Schema::CBC . 'TaxAmount',
+                'value'      => number_format($this->taxAmount, 2, '.', ''),
+                'attributes' => [
+                    'currencyID' => Generator::$currencyID,
                 ],
-                Schema::CAC . 'TaxCategory' => $this->taxCategory,
-            ]
-        );
+            ];
+        }
+
+        $elements[Schema::CAC . 'TaxCategory'] = $this->taxCategory;
+
+        $writer->write($elements);
     }
 
     /**
